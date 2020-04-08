@@ -14,9 +14,7 @@ var margin = {
 var width = svgWidth - margin.left - margin.right;
 var height = svgHeight - margin.top - margin.bottom;
 
-// Create an SVG wrapper,
-// append an SVG group that will hold our chart,
-// and shift the latter by left and top margins.
+// Create an SVG wrapper, append an SVG group, shift the group by left and top margins.
 // =================================
 var svg = d3
   .select("#scatter")
@@ -37,17 +35,17 @@ var yAxis = chartGroup.append("g");
 // Draw circles
 var circles;
 
-//Draw circle labels
+// Draw circle labels
 var circleLabels;
 
-//Initialize Tooltip
+// Initialize tooltip
 var toolTip = d3.tip().attr("class", "tooltip");
 
-// Create the tooltip in chartGroup.
+// Create the tooltip in chartGroup
 chartGroup.call(toolTip);
 
-//DRAW AXIS LABELS
-//Append x axis label
+// Draw axis labels
+// Append x-axis label
 function xAxisLabel(name, d) {
   return chartGroup
     .append("text")
@@ -59,11 +57,12 @@ function xAxisLabel(name, d) {
     .classed("axis-label", true)
     .text(name);
 }
+
 var povertyAxis = xAxisLabel("In Poverty %", 20);
 var ageAxis = xAxisLabel("Age (Median)", 40);
 var incomeAxis = xAxisLabel("Household Income (Median)", 60);
 
-// Append y axis
+// Append-y axis
 function yAxisLabel(name, d) {
   return chartGroup
     .append("text")
@@ -75,14 +74,14 @@ function yAxisLabel(name, d) {
     .classed("axis-label", true)
     .text(name);
 }
+
 var healthcareAxis = yAxisLabel("Lacks Healthcare (%)", 30);
 var smokeAxis = yAxisLabel("Smoke (%)", 50);
 var obesityAxis = yAxisLabel("Obese (%)", 70);
 
-//Function to create/update graph
+// Function to create/update graph
 function drawGraph(censusData, x = "poverty", y = "healthcare") {
   // Create the scales for the chart
-  // =================================
   var xLinearScale = d3
     .scaleLinear()
     .domain(d3.extent(censusData, (d) => d[x]))
@@ -94,19 +93,17 @@ function drawGraph(censusData, x = "poverty", y = "healthcare") {
     .range([height, 0]);
 
   // Create the axes
-  // =================================
   var bottomAxis = d3.axisBottom(xLinearScale);
   var leftAxis = d3.axisLeft(yLinearScale);
 
-  // Append the axes to the chartGroup
-  // ==============================================
+  // Append the axes
   // Add x-axis
   xAxis.transition().duration(500).call(bottomAxis);
 
   // Add y-axis
   yAxis.transition().duration(500).call(leftAxis);
 
-  //Append circles
+  // Append circles
   circles
     .transition()
     .duration(500)
@@ -115,7 +112,7 @@ function drawGraph(censusData, x = "poverty", y = "healthcare") {
     .attr("r", 10)
     .style("fill", "lightblue");
 
-  // Add state labels to the points
+  // Append state labels to the circles
   circleLabels
     .transition()
     .duration(500)
@@ -126,7 +123,7 @@ function drawGraph(censusData, x = "poverty", y = "healthcare") {
     .attr("fill", "black")
     .attr("text-anchor", "middle");
 
-  // X AXIS On Clicks
+  // Event trigger: x-axis
   povertyAxis.classed("active", x == "poverty").on("click", () => {
     drawGraph(censusData, "poverty", y);
   });
@@ -139,7 +136,7 @@ function drawGraph(censusData, x = "poverty", y = "healthcare") {
     drawGraph(censusData, "income", y);
   });
 
-  // Y AXIS On Clicks
+  // Event trigger: y-axis
   healthcareAxis.classed("active", y == "healthcare").on("click", () => {
     drawGraph(censusData, x, "healthcare");
   });
@@ -152,6 +149,7 @@ function drawGraph(censusData, x = "poverty", y = "healthcare") {
     drawGraph(censusData, x, "obesity");
   });
 
+  // Create tooltip
   toolTip.html(
     (d) =>
       `${d.state}<hr style="margin-bottom:0;background-color:white">${x}: ${d[x]}<br/>${y}: ${d[y]}`
@@ -159,7 +157,6 @@ function drawGraph(censusData, x = "poverty", y = "healthcare") {
 }
 
 // Import data from the data.csv file
-// =================================
 d3.csv("./assets/data/data.csv").then(function (censusData) {
   //Format the data
   censusData.forEach(function (data) {
@@ -187,9 +184,9 @@ d3.csv("./assets/data/data.csv").then(function (censusData) {
     .text((d) => d.abbr)
     // Create "mouseover" event listener to display tooltip
     .on("mouseover", (d) => toolTip.show(d, this))
-    // Step 4: Create "mouseout" event listener to hide tooltip
+    // Create "mouseout" event listener to hide tooltip
     .on("mouseout", (d) => toolTip.hide(d, this));
 
-  //Update Graph
+  //Create initial graph
   drawGraph(censusData);
 });

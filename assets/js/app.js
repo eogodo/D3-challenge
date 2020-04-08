@@ -8,7 +8,7 @@ var margin = {
   top: 20,
   right: 40,
   bottom: 60,
-  left: 50
+  left: 50,
 };
 
 var width = svgWidth - margin.left - margin.right;
@@ -19,7 +19,7 @@ var height = svgHeight - margin.top - margin.bottom;
 // and shift the latter by left and top margins.
 // =================================
 var svg = d3
-  .select("body")
+  .select("#scatter")
   .append("svg")
   .attr("width", svgWidth)
   .attr("height", svgHeight);
@@ -30,9 +30,9 @@ var chartGroup = svg
 
 // Import data from the data.csv file
 // =================================
-d3.csv("./assets/data/data.csv").then(function(censusData) {
+d3.csv("./assets/data/data.csv").then(function (censusData) {
   //Format the data
-  censusData.forEach(function(data) {
+  censusData.forEach(function (data) {
     data.poverty = +data.poverty;
     data.healthcare = +data.healthcare;
   });
@@ -41,12 +41,12 @@ d3.csv("./assets/data/data.csv").then(function(censusData) {
   // =================================
   var xLinearScale = d3
     .scaleLinear()
-    .domain([8.5, d3.max(censusData, d => d.poverty)])
+    .domain([8.5, d3.max(censusData, (d) => d.poverty)])
     .range([0, width]);
 
   var yLinearScale = d3
     .scaleLinear()
-    .domain([4, d3.max(censusData, d => d.healthcare)])
+    .domain([4, d3.max(censusData, (d) => d.healthcare)])
     .range([height, 0]);
 
   // Step 7: Create the axes
@@ -72,8 +72,8 @@ d3.csv("./assets/data/data.csv").then(function(censusData) {
     .data(censusData)
     .enter()
     .append("circle")
-    .attr("cx", d => xLinearScale(d.poverty))
-    .attr("cy", d => yLinearScale(d.healthcare))
+    .attr("cx", (d) => xLinearScale(d.poverty))
+    .attr("cy", (d) => yLinearScale(d.healthcare))
     .attr("r", 10)
     .style("fill", "lightblue");
 
@@ -83,9 +83,9 @@ d3.csv("./assets/data/data.csv").then(function(censusData) {
     .data(censusData)
     .enter()
     .append("text")
-    .attr("x", d => xLinearScale(d.poverty))
-    .attr("y", d => yLinearScale(d.healthcare) + 4)
-    .text(d => d.abbr)
+    .attr("x", (d) => xLinearScale(d.poverty))
+    .attr("y", (d) => yLinearScale(d.healthcare) + 4)
+    .text((d) => d.abbr)
     .attr("font-size", "10px")
     .attr("font-weight", "bold")
     .attr("fill", "white")
