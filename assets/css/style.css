@@ -29,3 +29,21 @@ body {
   margin: 0;
   font-size: 16px;
 }
+
+.tooltip {
+  background-color: rgb(9, 0, 88);
+  padding: 10px;
+  box-sizing: border-box;
+  color: white;
+  border-radius: 5px;
+  width: 130px;
+  text-align: center;
+  opacity: 0.5;
+}
+.axis-label {
+  fill: rgb(175, 175, 175);
+}
+.axis-label:hover {
+  cursor: pointer;
+  fill: rgb(117, 117, 117);
+}
